@@ -184,4 +184,147 @@ document.body.appendChild(progressBar);
 window.addEventListener('scroll', () => {
     const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
     progressBar.style.width = scrolled + '%';
+});
+
+// Carousel functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+    const track = document.querySelector('.carousel-track');
+    const prevPreview = document.querySelector('.carousel-preview-prev img');
+    const nextPreview = document.querySelector('.carousel-preview-next img');
+    
+    // Image sources array - matches the order in HTML
+    const imageSources = [
+        'pic1.JPEG',
+        'pic2.JPEG',
+        'pic3.PNG',
+        'pic4.JPEG',
+        'pic5.JPEG'
+    ];
+    
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    
+    // Function to update carousel
+    function updateCarousel() {
+        // Update slides
+        slides.forEach((slide, index) => {
+            slide.classList.remove('active');
+            if (index === currentSlide) {
+                slide.classList.add('active');
+            }
+        });
+        
+        // Update dots
+        dots.forEach((dot, index) => {
+            dot.classList.remove('active');
+            if (index === currentSlide) {
+                dot.classList.add('active');
+            }
+        });
+        
+        // Update track position
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update preview images
+        if (prevPreview) {
+            const prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+            prevPreview.src = imageSources[prevIndex];
+            prevPreview.alt = `Previous: ${prevIndex + 1}`;
+        }
+        
+        if (nextPreview) {
+            const nextIndex = (currentSlide + 1) % totalSlides;
+            nextPreview.src = imageSources[nextIndex];
+            nextPreview.alt = `Next: ${nextIndex + 1}`;
+        }
+    }
+    
+    // Next slide
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+    }
+    
+    // Previous slide
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+    }
+    
+    // Event listeners
+    if (nextBtn) {
+        nextBtn.addEventListener('click', nextSlide);
+    }
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', prevSlide);
+    }
+    
+    // Dot navigation
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentSlide = index;
+            updateCarousel();
+        });
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevSlide();
+            resetAutoPlay();
+        } else if (e.key === 'ArrowRight') {
+            nextSlide();
+            resetAutoPlay();
+        }
+    });
+    
+    // Auto-play functionality
+    let autoPlayInterval;
+    const autoPlayDelay = 4000; // 4 seconds between slides
+    
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
+    }
+    
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+        }
+    }
+    
+    function resetAutoPlay() {
+        stopAutoPlay();
+        startAutoPlay();
+    }
+    
+    // Pause auto-play on hover and resume on leave
+    const carouselContainer = document.querySelector('.carousel-container');
+    if (carouselContainer) {
+        carouselContainer.addEventListener('mouseenter', () => {
+            stopAutoPlay();
+        });
+        carouselContainer.addEventListener('mouseleave', () => {
+            startAutoPlay();
+        });
+    }
+    
+    // Pause auto-play when user interacts with buttons or dots
+    if (nextBtn) {
+        nextBtn.addEventListener('click', resetAutoPlay);
+    }
+    if (prevBtn) {
+        prevBtn.addEventListener('click', resetAutoPlay);
+    }
+    dots.forEach((dot) => {
+        dot.addEventListener('click', resetAutoPlay);
+    });
+    
+    // Initialize carousel and start auto-play
+    updateCarousel();
+    startAutoPlay();
 }); 
