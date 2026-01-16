@@ -5,12 +5,19 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
     color: #ffffff;
     overflow-x: hidden;
     background: #000000;
+    max-width: 100%;
+    width: 100%;
 }
 
 .container {
@@ -470,7 +477,9 @@ body {
 .carousel-container {
     margin-top: 4rem;
     padding: 2rem 0;
-    overflow: visible;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
 }
 
 .carousel-wrapper {
@@ -481,6 +490,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .carousel-gallery {
@@ -489,10 +501,12 @@ body {
     justify-content: center;
     gap: 0;
     width: 100%;
+    max-width: 100%;
     padding: 0 60px;
     box-sizing: border-box;
     margin: 0;
     position: relative;
+    overflow: hidden;
 }
 
 .carousel {
@@ -966,11 +980,21 @@ body {
     .carousel-wrapper {
         max-width: 100%;
         padding: 0 60px;
+        overflow: hidden;
     }
     
     .carousel-gallery {
         gap: 0.5rem;
-        padding: 0 60px;
+        padding: 0 50px;
+        overflow: hidden;
+    }
+    
+    .carousel-preview-prev {
+        margin-right: 0;
+    }
+    
+    .carousel-preview-next {
+        margin-left: 0;
     }
     
     .carousel-phone-mockup {
@@ -1112,6 +1136,13 @@ body {
         
         .carousel-gallery {
             justify-content: center;
+            padding: 0 50px;
+            overflow: hidden;
+        }
+        
+        .carousel-wrapper {
+            padding: 0 50px;
+            overflow: hidden;
         }
     }
     
